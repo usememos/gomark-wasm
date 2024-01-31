@@ -6,3 +6,10 @@ plugins:
     out: gen
     opt:
       - paths=source_relative
+  - plugin: buf.build/community/stephenh-ts-proto:v1.152.1
+    out: gen
+    # reference: https://github.com/deeplay-io/nice-grpc/blob/master/packages/nice-grpc-web/README.md#using-ts-proto
+    opt:
+      - env=browser
+      - onlyTypes=true
+      - stringEnums=true
