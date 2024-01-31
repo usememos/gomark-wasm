@@ -5,44 +5,44 @@ import (
 	"github.com/yourselfhosted/gomark/ast"
 )
 
-func ConvertFromASTNodes(rawNodes []ast.Node) []*nodepb.Node {
+func convertFromASTNodes(rawNodes []ast.Node) []*nodepb.Node {
 	nodes := []*nodepb.Node{}
 	for _, rawNode := range rawNodes {
-		node := ConvertFromASTNode(rawNode)
+		node := convertFromASTNode(rawNode)
 		nodes = append(nodes, node)
 	}
 	return nodes
 }
 
-func ConvertFromASTNode(rawNode ast.Node) *nodepb.Node {
+func convertFromASTNode(rawNode ast.Node) *nodepb.Node {
 	node := &nodepb.Node{
-		Type: nodepb.NodeType(rawNode.Type()),
+		Type: nodepb.NodeType(nodepb.NodeType_value[string(rawNode.Type())]),
 	}
 
 	switch n := rawNode.(type) {
 	case *ast.LineBreak:
 		node.Node = &nodepb.Node_LineBreakNode{}
 	case *ast.Paragraph:
-		children := ConvertFromASTNodes(n.Children)
+		children := convertFromASTNodes(n.Children)
 		node.Node = &nodepb.Node_ParagraphNode{ParagraphNode: &nodepb.ParagraphNode{Children: children}}
 	case *ast.CodeBlock:
 		node.Node = &nodepb.Node_CodeBlockNode{CodeBlockNode: &nodepb.CodeBlockNode{Language: n.Language, Content: n.Content}}
 	case *ast.Heading:
-		children := ConvertFromASTNodes(n.Children)
+		children := convertFromASTNodes(n.Children)
 		node.Node = &nodepb.Node_HeadingNode{HeadingNode: &nodepb.HeadingNode{Level: int32(n.Level), Children: children}}
 	case *ast.HorizontalRule:
 		node.Node = &nodepb.Node_HorizontalRuleNode{HorizontalRuleNode: &nodepb.HorizontalRuleNode{Symbol: n.Symbol}}
 	case *ast.Blockquote:
-		children := ConvertFromASTNodes(n.Children)
+		children := convertFromASTNodes(n.Children)
 		node.Node = &nodepb.Node_BlockquoteNode{BlockquoteNode: &nodepb.BlockquoteNode{Children: children}}
 	case *ast.OrderedList:
-		children := ConvertFromASTNodes(n.Children)
+		children := convertFromASTNodes(n.Children)
 		node.Node = &nodepb.Node_OrderedListNode{OrderedListNode: &nodepb.OrderedListNode{Number: n.Number, Indent: int32(n.Indent), Children: children}}
 	case *ast.UnorderedList:
-		children := ConvertFromASTNodes(n.Children)
+		children := convertFromASTNodes(n.Children)
 		node.Node = &nodepb.Node_UnorderedListNode{UnorderedListNode: &nodepb.UnorderedListNode{Symbol: n.Symbol, Indent: int32(n.Indent), Children: children}}
 	case *ast.TaskList:
-		children := ConvertFromASTNodes(n.Children)
+		children := convertFromASTNodes(n.Children)
 		node.Node = &nodepb.Node_TaskListNode{TaskListNode: &nodepb.TaskListNode{Symbol: n.Symbol, Indent: int32(n.Indent), Complete: n.Complete, Children: children}}
 	case *ast.MathBlock:
 		node.Node = &nodepb.Node_MathBlockNode{MathBlockNode: &nodepb.MathBlockNode{Content: n.Content}}
@@ -53,7 +53,7 @@ func ConvertFromASTNode(rawNode ast.Node) *nodepb.Node {
 	case *ast.Text:
 		node.Node = &nodepb.Node_TextNode{TextNode: &nodepb.TextNode{Content: n.Content}}
 	case *ast.Bold:
-		children := ConvertFromASTNodes(n.Children)
+		children := convertFromASTNodes(n.Children)
 		node.Node = &nodepb.Node_BoldNode{BoldNode: &nodepb.BoldNode{Symbol: n.Symbol, Children: children}}
 	case *ast.Italic:
 		node.Node = &nodepb.Node_ItalicNode{ItalicNode: &nodepb.ItalicNode{Symbol: n.Symbol, Content: n.Content}}

@@ -21,7 +21,7 @@ func Parse(this js.Value, inputs []js.Value) any {
 		panic(err)
 	}
 
-	nodes := ConvertFromASTNodes(astNodes)
+	nodes := convertFromASTNodes(astNodes)
 	data := []interface{}{}
 	for _, node := range nodes {
 		bytes, _ := protojson.Marshal(node)
