@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gomark WASM Example</title>
+    <!-- Step1: import wasm_exec.js file -->
+    <script src="wasm_exec.js"></script>
+    <script>
+      // Step2: instantiate gomar.wasm file.
+      const go = new Go();
+      WebAssembly.instantiateStreaming(fetch("gomark.wasm"), go.importObject).then((result) => {
+        go.run(result.instance);
+      });
+      // Step3: everything is ready to use parse/restore function.
+      const nodes = window.parse("# Hello, Gomark!");
+      const content = window.restore(nodes);
+    </script>
+  </head>
+  <body></body>
+</html>
