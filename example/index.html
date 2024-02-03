@@ -11,10 +11,10 @@
       const go = new Go();
       WebAssembly.instantiateStreaming(fetch("gomark.wasm"), go.importObject).then((result) => {
         go.run(result.instance);
+        // Step3: everything is ready to use parse/restore function.
+        const nodes = window.parse("# Hello, Gomark!");
+        const content = window.restore(nodes);
       });
-      // Step3: everything is ready to use parse/restore function.
-      const nodes = window.parse("# Hello, Gomark!");
-      const content = window.restore(nodes);
     </script>
   </head>
   <body></body>
