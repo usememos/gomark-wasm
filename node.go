@@ -83,6 +83,8 @@ func convertFromASTNode(rawNode ast.Node) *nodepb.Node {
 		node.Node = &nodepb.Node_SuperscriptNode{SuperscriptNode: &nodepb.SuperscriptNode{Content: n.Content}}
 	case *ast.ReferencedContent:
 		node.Node = &nodepb.Node_ReferencedContentNode{ReferencedContentNode: &nodepb.ReferencedContentNode{ResourceName: n.ResourceName, Params: n.Params}}
+	case *ast.Spoiler:
+		node.Node = &nodepb.Node_SpoilerNode{SpoilerNode: &nodepb.SpoilerNode{Content: n.Content}}
 	default:
 		node.Node = &nodepb.Node_TextNode{TextNode: &nodepb.TextNode{}}
 	}
@@ -174,6 +176,8 @@ func convertToASTNode(node *nodepb.Node) ast.Node {
 		return &ast.Superscript{Content: n.SuperscriptNode.Content}
 	case *nodepb.Node_ReferencedContentNode:
 		return &ast.ReferencedContent{ResourceName: n.ReferencedContentNode.ResourceName, Params: n.ReferencedContentNode.Params}
+	case *nodepb.Node_SpoilerNode:
+		return &ast.Spoiler{Content: n.SpoilerNode.Content}
 	default:
 		return &ast.Text{}
 	}
