@@ -4,9 +4,6 @@ import (
 	"encoding/json"
 	"syscall/js"
 
-	"google.golang.org/protobuf/encoding/protojson"
-
-	nodepb "github.com/yourselfhosted/gomark-wasm/proto/gen/node/v1"
 	"github.com/yourselfhosted/gomark/parser"
 	"github.com/yourselfhosted/gomark/parser/tokenizer"
 	"github.com/yourselfhosted/gomark/restore"
@@ -22,13 +19,9 @@ func Parse(this js.Value, inputs []js.Value) any {
 	}
 
 	nodes := convertFromASTNodes(astNodes)
+	bytes, _ := json.Marshal(nodes)
 	data := []interface{}{}
-	for _, node := range nodes {
-		bytes, _ := protojson.Marshal(node)
-		v := map[string]interface{}{}
-		json.Unmarshal(bytes, &v)
-		data = append(data, v)
-	}
+	json.Unmarshal(bytes, &data)
 	return data
 }
 
@@ -39,13 +32,9 @@ func Restore(this js.Value, inputs []js.Value) any {
 		return nil
 	}
 
-	nodes := []*nodepb.Node{}
-	for _, n := range astNodes {
-		bytes, _ := json.Marshal(n)
-		v1Node := &nodepb.Node{}
-		protojson.Unmarshal(bytes, v1Node)
-		nodes = append(nodes, v1Node)
-	}
+	nodes := []*Node{}
+	bytes, _ := json.Marshal(astNodes)
+	json.Unmarshal(bytes, &nodes)
 	content := restore.Restore(convertToASTNodes(nodes))
 	return content
 }
