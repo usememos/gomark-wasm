@@ -1,12 +1,14 @@
 package main
 
 import (
+	"encoding/json"
+
 	"github.com/yourselfhosted/gomark/ast"
 )
 
 type Node struct {
-	Type ast.NodeType `json:"type"`
-	Node BaseNode     `json:"node"`
+	Type  ast.NodeType `json:"type"`
+	Value BaseNode     `json:"value"`
 }
 
 type BaseNode interface{}
@@ -155,76 +157,76 @@ func convertFromASTNode(node ast.Node) *Node {
 
 	switch node.(type) {
 	case *ast.LineBreak:
-		n.Node = LineBreakNode{}
+		n.Value = LineBreakNode{}
 	case *ast.Paragraph:
 		children := convertFromASTNodes(node.(*ast.Paragraph).Children)
-		n.Node = ParagraphNode{Children: children}
+		n.Value = ParagraphNode{Children: children}
 	case *ast.CodeBlock:
-		n.Node = CodeBlockNode{Language: node.(*ast.CodeBlock).Language, Content: node.(*ast.CodeBlock).Content}
+		n.Value = CodeBlockNode{Language: node.(*ast.CodeBlock).Language, Content: node.(*ast.CodeBlock).Content}
 	case *ast.Heading:
 		children := convertFromASTNodes(node.(*ast.Heading).Children)
-		n.Node = HeadingNode{Level: node.(*ast.Heading).Level, Children: children}
+		n.Value = HeadingNode{Level: node.(*ast.Heading).Level, Children: children}
 	case *ast.HorizontalRule:
-		n.Node = HorizontalRuleNode{Symbol: node.(*ast.HorizontalRule).Symbol}
+		n.Value = HorizontalRuleNode{Symbol: node.(*ast.HorizontalRule).Symbol}
 	case *ast.Blockquote:
 		children := convertFromASTNodes(node.(*ast.Blockquote).Children)
-		n.Node = BlockquoteNode{Children: children}
+		n.Value = BlockquoteNode{Children: children}
 	case *ast.OrderedList:
 		children := convertFromASTNodes(node.(*ast.OrderedList).Children)
-		n.Node = OrderedListNode{Number: node.(*ast.OrderedList).Number, Indent: node.(*ast.OrderedList).Indent, Children: children}
+		n.Value = OrderedListNode{Number: node.(*ast.OrderedList).Number, Indent: node.(*ast.OrderedList).Indent, Children: children}
 	case *ast.UnorderedList:
 		children := convertFromASTNodes(node.(*ast.UnorderedList).Children)
-		n.Node = UnorderedListNode{Symbol: node.(*ast.UnorderedList).Symbol, Indent: node.(*ast.UnorderedList).Indent, Children: children}
+		n.Value = UnorderedListNode{Symbol: node.(*ast.UnorderedList).Symbol, Indent: node.(*ast.UnorderedList).Indent, Children: children}
 	case *ast.TaskList:
 		children := convertFromASTNodes(node.(*ast.TaskList).Children)
-		n.Node = TaskListNode{Symbol: node.(*ast.TaskList).Symbol, Indent: node.(*ast.TaskList).Indent, Complete: node.(*ast.TaskList).Complete, Children: children}
+		n.Value = TaskListNode{Symbol: node.(*ast.TaskList).Symbol, Indent: node.(*ast.TaskList).Indent, Complete: node.(*ast.TaskList).Complete, Children: children}
 	case *ast.MathBlock:
-		n.Node = MathBlockNode{Content: node.(*ast.MathBlock).Content}
+		n.Value = MathBlockNode{Content: node.(*ast.MathBlock).Content}
 	case *ast.Table:
 		rows := []TableRowNode{}
 		for _, row := range node.(*ast.Table).Rows {
 			rows = append(rows, TableRowNode{Cells: row})
 		}
-		n.Node = TableNode{Header: node.(*ast.Table).Header, Delimiter: node.(*ast.Table).Delimiter, Rows: rows}
+		n.Value = TableNode{Header: node.(*ast.Table).Header, Delimiter: node.(*ast.Table).Delimiter, Rows: rows}
 	case *ast.EmbeddedContent:
-		n.Node = EmbeddedContentNode{ResourceName: node.(*ast.EmbeddedContent).ResourceName, Params: node.(*ast.EmbeddedContent).Params}
+		n.Value = EmbeddedContentNode{ResourceName: node.(*ast.EmbeddedContent).ResourceName, Params: node.(*ast.EmbeddedContent).Params}
 	case *ast.Text:
-		n.Node = TextNode{Content: node.(*ast.Text).Content}
+		n.Value = TextNode{Content: node.(*ast.Text).Content}
 	case *ast.Bold:
 		children := convertFromASTNodes(node.(*ast.Bold).Children)
-		n.Node = BoldNode{Symbol: node.(*ast.Bold).Symbol, Children: children}
+		n.Value = BoldNode{Symbol: node.(*ast.Bold).Symbol, Children: children}
 	case *ast.Italic:
-		n.Node = ItalicNode{Symbol: node.(*ast.Italic).Symbol, Content: node.(*ast.Italic).Content}
+		n.Value = ItalicNode{Symbol: node.(*ast.Italic).Symbol, Content: node.(*ast.Italic).Content}
 	case *ast.BoldItalic:
-		n.Node = BoldItalicNode{Symbol: node.(*ast.BoldItalic).Symbol, Content: node.(*ast.BoldItalic).Content}
+		n.Value = BoldItalicNode{Symbol: node.(*ast.BoldItalic).Symbol, Content: node.(*ast.BoldItalic).Content}
 	case *ast.Code:
-		n.Node = CodeNode{Content: node.(*ast.Code).Content}
+		n.Value = CodeNode{Content: node.(*ast.Code).Content}
 	case *ast.Image:
-		n.Node = ImageNode{AltText: node.(*ast.Image).AltText, Url: node.(*ast.Image).URL}
+		n.Value = ImageNode{AltText: node.(*ast.Image).AltText, Url: node.(*ast.Image).URL}
 	case *ast.Link:
-		n.Node = LinkNode{Text: node.(*ast.Link).Text, Url: node.(*ast.Link).URL}
+		n.Value = LinkNode{Text: node.(*ast.Link).Text, Url: node.(*ast.Link).URL}
 	case *ast.AutoLink:
-		n.Node = AutoLinkNode{Url: node.(*ast.AutoLink).URL, IsRawText: node.(*ast.AutoLink).IsRawText}
+		n.Value = AutoLinkNode{Url: node.(*ast.AutoLink).URL, IsRawText: node.(*ast.AutoLink).IsRawText}
 	case *ast.Tag:
-		n.Node = TagNode{Content: node.(*ast.Tag).Content}
+		n.Value = TagNode{Content: node.(*ast.Tag).Content}
 	case *ast.Strikethrough:
-		n.Node = StrikethroughNode{Content: node.(*ast.Strikethrough).Content}
+		n.Value = StrikethroughNode{Content: node.(*ast.Strikethrough).Content}
 	case *ast.EscapingCharacter:
-		n.Node = EscapingCharacterNode{Symbol: node.(*ast.EscapingCharacter).Symbol}
+		n.Value = EscapingCharacterNode{Symbol: node.(*ast.EscapingCharacter).Symbol}
 	case *ast.Math:
-		n.Node = MathNode{Content: node.(*ast.Math).Content}
+		n.Value = MathNode{Content: node.(*ast.Math).Content}
 	case *ast.Highlight:
-		n.Node = HighlightNode{Content: node.(*ast.Highlight).Content}
+		n.Value = HighlightNode{Content: node.(*ast.Highlight).Content}
 	case *ast.Subscript:
-		n.Node = SubscriptNode{Content: node.(*ast.Subscript).Content}
+		n.Value = SubscriptNode{Content: node.(*ast.Subscript).Content}
 	case *ast.Superscript:
-		n.Node = SuperscriptNode{Content: node.(*ast.Superscript).Content}
+		n.Value = SuperscriptNode{Content: node.(*ast.Superscript).Content}
 	case *ast.ReferencedContent:
-		n.Node = ReferencedContentNode{ResourceName: node.(*ast.ReferencedContent).ResourceName, Params: node.(*ast.ReferencedContent).Params}
+		n.Value = ReferencedContentNode{ResourceName: node.(*ast.ReferencedContent).ResourceName, Params: node.(*ast.ReferencedContent).Params}
 	case *ast.Spoiler:
-		n.Node = SpoilerNode{Content: node.(*ast.Spoiler).Content}
+		n.Value = SpoilerNode{Content: node.(*ast.Spoiler).Content}
 	default:
-		n.Node = TextNode{Content: ""}
+		n.Value = TextNode{Content: ""}
 	}
 	return n
 }
@@ -238,76 +240,133 @@ func convertFromASTNodes(rawNodes []ast.Node) []*Node {
 }
 
 func convertToASTNode(node *Node) ast.Node {
-	switch n := node.Node.(type) {
-	case LineBreakNode:
+	valueBytes, _ := json.Marshal(node.Value)
+	switch node.Type {
+	case ast.LineBreakNode:
 		return &ast.LineBreak{}
-	case ParagraphNode:
-		children := convertToASTNodes(n.Children)
+	case ast.ParagraphNode:
+		paragraphNode := ParagraphNode{}
+		json.Unmarshal(valueBytes, &paragraphNode)
+		children := convertToASTNodes(paragraphNode.Children)
 		return &ast.Paragraph{Children: children}
-	case CodeBlockNode:
-		return &ast.CodeBlock{Language: n.Language, Content: n.Content}
-	case HeadingNode:
-		children := convertToASTNodes(n.Children)
-		return &ast.Heading{Level: n.Level, Children: children}
-	case HorizontalRuleNode:
-		return &ast.HorizontalRule{Symbol: n.Symbol}
-	case BlockquoteNode:
-		children := convertToASTNodes(n.Children)
+	case ast.CodeBlockNode:
+		codeBlockNode := CodeBlockNode{}
+		json.Unmarshal(valueBytes, &codeBlockNode)
+		return &ast.CodeBlock{Language: codeBlockNode.Language, Content: codeBlockNode.Content}
+	case ast.HeadingNode:
+		headingNode := HeadingNode{}
+		json.Unmarshal(valueBytes, &headingNode)
+		children := convertToASTNodes(headingNode.Children)
+		return &ast.Heading{Level: headingNode.Level, Children: children}
+	case ast.HorizontalRuleNode:
+		horizontalRuleNode := HorizontalRuleNode{}
+		json.Unmarshal(valueBytes, &horizontalRuleNode)
+		return &ast.HorizontalRule{Symbol: horizontalRuleNode.Symbol}
+	case ast.BlockquoteNode:
+		blockquoteNode := BlockquoteNode{}
+		json.Unmarshal(valueBytes, &blockquoteNode)
+		children := convertToASTNodes(blockquoteNode.Children)
 		return &ast.Blockquote{Children: children}
-	case OrderedListNode:
-		children := convertToASTNodes(n.Children)
-		return &ast.OrderedList{Number: n.Number, Indent: n.Indent, Children: children}
-	case UnorderedListNode:
-		children := convertToASTNodes(n.Children)
-		return &ast.UnorderedList{Symbol: n.Symbol, Indent: n.Indent, Children: children}
-	case TaskListNode:
-		children := convertToASTNodes(n.Children)
-		return &ast.TaskList{Symbol: n.Symbol, Indent: n.Indent, Complete: n.Complete, Children: children}
-	case MathBlockNode:
-		return &ast.MathBlock{Content: n.Content}
-	case TableNode:
+	case ast.OrderedListNode:
+		orderedListNode := OrderedListNode{}
+		json.Unmarshal(valueBytes, &orderedListNode)
+		children := convertToASTNodes(orderedListNode.Children)
+		return &ast.OrderedList{Number: orderedListNode.Number, Indent: orderedListNode.Indent, Children: children}
+	case ast.UnorderedListNode:
+		unorderedListNode := UnorderedListNode{}
+		json.Unmarshal(valueBytes, &unorderedListNode)
+		children := convertToASTNodes(unorderedListNode.Children)
+		return &ast.UnorderedList{Symbol: unorderedListNode.Symbol, Indent: unorderedListNode.Indent, Children: children}
+	case ast.TaskListNode:
+		taskListNode := TaskListNode{}
+		json.Unmarshal(valueBytes, &taskListNode)
+		children := convertToASTNodes(taskListNode.Children)
+		return &ast.TaskList{Symbol: taskListNode.Symbol, Indent: taskListNode.Indent, Complete: taskListNode.Complete, Children: children}
+	case ast.MathBlockNode:
+		mathBlockNode := MathBlockNode{}
+		json.Unmarshal(valueBytes, &mathBlockNode)
+		return &ast.MathBlock{Content: mathBlockNode.Content}
+	case ast.TableNode:
+		tableNode := TableNode{}
+		json.Unmarshal(valueBytes, &tableNode)
 		rows := [][]string{}
-		for _, row := range n.Rows {
+		for _, row := range tableNode.Rows {
 			rows = append(rows, row.Cells)
 		}
-		return &ast.Table{Header: n.Header, Delimiter: n.Delimiter, Rows: rows}
-	case EmbeddedContentNode:
-		return &ast.EmbeddedContent{ResourceName: n.ResourceName, Params: n.Params}
-	case TextNode:
-		return &ast.Text{Content: n.Content}
-	case BoldNode:
-		children := convertToASTNodes(n.Children)
-		return &ast.Bold{Symbol: n.Symbol, Children: children}
-	case ItalicNode:
-		return &ast.Italic{Symbol: n.Symbol, Content: n.Content}
-	case BoldItalicNode:
-		return &ast.BoldItalic{Symbol: n.Symbol, Content: n.Content}
-	case CodeNode:
-		return &ast.Code{Content: n.Content}
-	case ImageNode:
-		return &ast.Image{AltText: n.AltText, URL: n.Url}
-	case LinkNode:
-		return &ast.Link{Text: n.Text, URL: n.Url}
-	case AutoLinkNode:
-		return &ast.AutoLink{URL: n.Url, IsRawText: n.IsRawText}
-	case TagNode:
-		return &ast.Tag{Content: n.Content}
-	case StrikethroughNode:
-		return &ast.Strikethrough{Content: n.Content}
-	case EscapingCharacterNode:
-		return &ast.EscapingCharacter{Symbol: n.Symbol}
-	case MathNode:
-		return &ast.Math{Content: n.Content}
-	case HighlightNode:
-		return &ast.Highlight{Content: n.Content}
-	case SubscriptNode:
-		return &ast.Subscript{Content: n.Content}
-	case SuperscriptNode:
-		return &ast.Superscript{Content: n.Content}
-	case ReferencedContentNode:
-		return &ast.ReferencedContent{ResourceName: n.ResourceName, Params: n.Params}
-	case SpoilerNode:
-		return &ast.Spoiler{Content: n.Content}
+		return &ast.Table{Header: tableNode.Header, Delimiter: tableNode.Delimiter, Rows: rows}
+	case ast.EmbeddedContentNode:
+		embeddedContentNode := EmbeddedContentNode{}
+		json.Unmarshal(valueBytes, &embeddedContentNode)
+		return &ast.EmbeddedContent{ResourceName: embeddedContentNode.ResourceName, Params: embeddedContentNode.Params}
+	case ast.TextNode:
+		textNode := TextNode{}
+		json.Unmarshal(valueBytes, &textNode)
+		return &ast.Text{Content: textNode.Content}
+	case ast.BoldNode:
+		boldNode := BoldNode{}
+		json.Unmarshal(valueBytes, &boldNode)
+		children := convertToASTNodes(boldNode.Children)
+		return &ast.Bold{Symbol: boldNode.Symbol, Children: children}
+	case ast.ItalicNode:
+		italicNode := ItalicNode{}
+		json.Unmarshal(valueBytes, &italicNode)
+		return &ast.Italic{Symbol: italicNode.Symbol, Content: italicNode.Content}
+	case ast.BoldItalicNode:
+		boldItalicNode := BoldItalicNode{}
+		json.Unmarshal(valueBytes, &boldItalicNode)
+		return &ast.BoldItalic{Symbol: boldItalicNode.Symbol, Content: boldItalicNode.Content}
+	case ast.CodeNode:
+		codeNode := CodeNode{}
+		json.Unmarshal(valueBytes, &codeNode)
+		return &ast.Code{Content: codeNode.Content}
+	case ast.ImageNode:
+		imageNode := ImageNode{}
+		json.Unmarshal(valueBytes, &imageNode)
+		return &ast.Image{AltText: imageNode.AltText, URL: imageNode.Url}
+	case ast.LinkNode:
+		linkNode := LinkNode{}
+		json.Unmarshal(valueBytes, &linkNode)
+		return &ast.Link{Text: linkNode.Text, URL: linkNode.Url}
+	case ast.AutoLinkNode:
+		autoLinkNode := AutoLinkNode{}
+		json.Unmarshal(valueBytes, &autoLinkNode)
+		return &ast.AutoLink{URL: autoLinkNode.Url, IsRawText: autoLinkNode.IsRawText}
+	case ast.TagNode:
+		tagNode := TagNode{}
+		json.Unmarshal(valueBytes, &tagNode)
+		return &ast.Tag{Content: tagNode.Content}
+	case ast.StrikethroughNode:
+		strikethroughNode := StrikethroughNode{}
+		json.Unmarshal(valueBytes, &strikethroughNode)
+		return &ast.Strikethrough{Content: strikethroughNode.Content}
+	case ast.EscapingCharacterNode:
+		escapingCharacterNode := EscapingCharacterNode{}
+		json.Unmarshal(valueBytes, &escapingCharacterNode)
+		return &ast.EscapingCharacter{Symbol: escapingCharacterNode.Symbol}
+	case ast.MathNode:
+		mathNode := MathNode{}
+		json.Unmarshal(valueBytes, &mathNode)
+		return &ast.Math{Content: mathNode.Content}
+	case ast.HighlightNode:
+		highlightNode := HighlightNode{}
+		json.Unmarshal(valueBytes, &highlightNode)
+		return &ast.Highlight{Content: highlightNode.Content}
+	case ast.SubscriptNode:
+		subscriptNode := SubscriptNode{}
+		json.Unmarshal(valueBytes, &subscriptNode)
+		return &ast.Subscript{Content: subscriptNode.Content}
+	case ast.SuperscriptNode:
+		superscriptNode := SuperscriptNode{}
+		json.Unmarshal(valueBytes, &superscriptNode)
+		return &ast.Superscript{Content: superscriptNode.Content}
+	case ast.ReferencedContentNode:
+		referencedContentNode := ReferencedContentNode{}
+		json.Unmarshal(valueBytes, &referencedContentNode)
+		return &ast.ReferencedContent{ResourceName: referencedContentNode.ResourceName, Params: referencedContentNode.Params}
+	case ast.SpoilerNode:
+		spoilerNode := SpoilerNode{}
+		json.Unmarshal(valueBytes, &spoilerNode)
+		return &ast.Spoiler{Content: spoilerNode.Content}
 	default:
 		return &ast.Text{}
 	}

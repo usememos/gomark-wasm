@@ -27,15 +27,12 @@ func Parse(this js.Value, inputs []js.Value) any {
 
 // Restore converts nodes to markdown.
 func Restore(this js.Value, inputs []js.Value) any {
-	astNodes, ok := convertJSValueToInterface(inputs[0]).([]interface{})
-	if !ok {
-		return nil
-	}
-
+	rawNodes, _ := convertJSValueToInterface(inputs[0]).([]interface{})
 	nodes := []*Node{}
-	bytes, _ := json.Marshal(astNodes)
+	bytes, _ := json.Marshal(rawNodes)
 	json.Unmarshal(bytes, &nodes)
-	content := restore.Restore(convertToASTNodes(nodes))
+	astNodes := convertToASTNodes(nodes)
+	content := restore.Restore(astNodes)
 	return content
 }
 
