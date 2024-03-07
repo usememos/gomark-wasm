@@ -5,4 +5,4 @@ set -e
 
 cd "$(dirname "$0")/../"
 
-tinygo build -o ./example/gomark.wasm -target wasm . 
+tinygo build -o ./example/gomark.wasm -target wasm -no-debug -gc=leaking . 
