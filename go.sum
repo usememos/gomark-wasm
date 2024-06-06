@@ -4,7 +4,7 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
-github.com/yourselfhosted/gomark v0.0.0-20240228170507-6a73bfad2eb6 h1:6h74aOL7vOgWX1TG2zwrUgSWm+isZhSKpmoOygO7Wlg=
-github.com/yourselfhosted/gomark v0.0.0-20240228170507-6a73bfad2eb6/go.mod h1:dfl9FHGIw1oISjPc16u8n6/H/dngiVfdVRtS5+WJ4Js=
+github.com/usememos/gomark v0.0.0-20240606150514-e3c6ebe8ead6 h1:Z2R5D+WdF0KZfu5qQYVfXgIR/e8udxtngPD0ABDt4Dg=
+github.com/usememos/gomark v0.0.0-20240606150514-e3c6ebe8ead6/go.mod h1:7CZRoYFQyyljzplOTeyODFR26O+wr0BbnpTWVLGfKJA=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
 gopkg.in/yaml.v3 v3.0.1/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=

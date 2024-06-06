@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 
-	"github.com/yourselfhosted/gomark/ast"
+	"github.com/usememos/gomark/ast"
 )
 
 type Node struct {

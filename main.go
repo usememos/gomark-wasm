@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"syscall/js"
 
-	"github.com/yourselfhosted/gomark/parser"
-	"github.com/yourselfhosted/gomark/parser/tokenizer"
-	"github.com/yourselfhosted/gomark/restore"
+	"github.com/usememos/gomark/parser"
+	"github.com/usememos/gomark/parser/tokenizer"
+	"github.com/usememos/gomark/restore"
 )
 
 // Parse converts markdown to nodes.
